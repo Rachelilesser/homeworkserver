@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "e00b1554-9d19-422c-9f46-dd801f6ad412",
+		"name": "Courses",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49479285",
+		"_collection_link": "https://rachelilesser-6932614.postman.co/workspace/rachelilesser's-Workspace~b8c2d508-c236-4828-8d05-209c5cc97be7/collection/49479285-e00b1554-9d19-422c-9f46-dd801f6ad412?action=share&source=collection_link&creator=49479285"
+	},
+	"item": [
+		{
+			"name": "GetAllCourses",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GetCourseById",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "post_newCourse",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "put_updateCourse",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCourse",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "postday",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "delateDay",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GetCourseByday",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllcoursebyDays",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
