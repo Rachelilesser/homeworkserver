@@ -1,0 +1,362 @@
+
+{
+  "info": {
+    "_postman_id": "game-manager-api-collection",
+    "name": "Game Manager API - Chaya Learning",
+    "description": "Collection for testing the Game Manager API with authentication, admin operations, and game mechanics",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Admin Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  const responseData = pm.response.json();",
+              "  pm.environment.set('admin_token', responseData.token);",
+              "  console.log('Token saved:', responseData.token);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"admin\", \"password\": \"admin123\"}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/manager/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "login"]
+        }
+      },
+      "description": "Admin login with default credentials (admin/admin123). Token is saved to environment variable for subsequent requests."
+    },
+    {
+      "name": "2. Admin - Update Range (MIN & MAX)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"min\": 10, \"max\": 50}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/manager/range",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "range"]
+        }
+      },
+      "description": "Admin updates the range (min=10, max=50). Requires valid token. A new random number is generated automatically."
+    },
+    {
+      "name": "3. Admin - Set Random Number Manually (for Testing)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"value\": 25}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/manager/set-random",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "set-random"]
+        }
+      },
+      "description": "Admin manually sets the random number to a specific value (25 in this example). Value must be within current min/max range. This value persists until a new random is generated."
+    },
+    {
+      "name": "4. Admin - Get Current Random Number",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/manager/random",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "random"]
+        }
+      },
+      "description": "Admin retrieves the current random number value. Requires valid token."
+    },
+    {
+      "name": "5. Game - Initialize (GET Range)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["game"]
+        }
+      },
+      "description": "Initialize game and get the current range (min/max). This also generates a new random number."
+    },
+    {
+      "name": "6. Game - Guess (Too High)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game/40",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["game", "40"]
+        }
+      },
+      "description": "Make a guess of 40. If the random number is 25 (set in step 3), this should return 'Too high'."
+    },
+    {
+      "name": "7. Game - Guess (Too Low)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game/10",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["game", "10"]
+        }
+      },
+      "description": "Make a guess of 10. If the random number is 25, this should return 'Too low'."
+    },
+    {
+      "name": "8. Game - Guess (Correct)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game/25",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["game", "25"]
+        }
+      },
+      "description": "Make a guess of 25 (the number set in step 3). This should return 'Correct'."
+    },
+    {
+      "name": "9. Admin - Generate New Random",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/manager/generate",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "generate"]
+        }
+      },
+      "description": "Admin generates a new random number from the current range. Requires valid token."
+    },
+    {
+      "name": "10. Game - Guess After New Generation",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game/25",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["game", "25"]
+        }
+      },
+      "description": "Make a guess after a new random has been generated (from step 9). The result should likely be different from the previous 'Correct' response."
+    },
+    {
+      "name": "11. ERROR - Admin Operation Without Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"min\": 5, \"max\": 100}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/manager/range",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "range"]
+        }
+      },
+      "description": "Attempt to update range WITHOUT a token. Should receive 401 Unauthorized error (Middleware: authenticatAdmin)."
+    },
+    {
+      "name": "12. ERROR - Invalid Token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer invalid_token_here"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/manager/random",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "random"]
+        }
+      },
+      "description": "Attempt to access admin endpoint with an invalid token. Should receive 401 Unauthorized error (Middleware: authenticatAdmin verifyToken)."
+    },
+    {
+      "name": "13. ERROR - Out of Range Value",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{admin_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"value\": 100}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/manager/set-random",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "set-random"]
+        }
+      },
+      "description": "Attempt to set a random value outside the current range (100 when range is 10-50). Should receive 400 Bad Request error (Validation Middleware in checks.ts)."
+    },
+    {
+      "name": "14. ERROR - Invalid Number (Non-numeric)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game/abc",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["game", "abc"]
+        }
+      },
+      "description": "Make a guess with a non-numeric value ('abc'). Should receive 400 Bad Request error (Middleware: checks.ts validation)."
+    },
+    {
+      "name": "15. ERROR - Missing Required Fields",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"admin\"}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/manager/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "login"]
+        }
+      },
+      "description": "Attempt to login with missing password field. Should receive 400 Bad Request error."
+    },
+    {
+      "name": "16. ERROR - Invalid Credentials",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"admin\", \"password\": \"wrongpassword\"}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/manager/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["manager", "login"]
+        }
+      },
+      "description": "Attempt to login with wrong password. Should receive 401 Unauthorized error."
+    }
+  ],
+  "variable": [
+    {
+      "key": "admin_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
